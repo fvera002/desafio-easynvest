@@ -8,8 +8,8 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
 {
     public class TesouroDireto : Investimento
     {
-        public DateTime DataDeCompra { get; set; }
         public double Iof { get; set; }
+
         public string Indice { get; set; }
 
         public override string Nome { get; set; }
@@ -20,6 +20,7 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
 
         public override DateTime Vencimento { get; set; }
 
+        [JsonIgnore]
         public override TipoInvestimento Tipo => TipoInvestimento.TesouroDireto;
 
         [JsonProperty("dataDeCompra")]

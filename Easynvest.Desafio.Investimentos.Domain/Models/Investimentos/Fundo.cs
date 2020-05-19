@@ -8,8 +8,6 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
 {
     public class Fundo : Investimento
     {
-		public double ValorAtual { get; set; }
-		public DateTime DataCompra { get; set; }
 		public double Iof { get; set; }
 		public double TotalTaxas { get; set; }
 		public double Quantity { get; set; }
@@ -19,7 +17,7 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
 		public override double ValorInvestido { get; set; }
 
 
-		[JsonProperty("valorAtual")]
+		[JsonProperty("ValorAtual")]
 		public override double ValorTotal { get; set; }
 
 

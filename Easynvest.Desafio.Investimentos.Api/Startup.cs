@@ -1,24 +1,12 @@
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
-using Easynvest.Desafio.Investimentos.Domain.Factories;
-using Easynvest.Desafio.Investimentos.Domain.Interfaces;
-using Easynvest.Desafio.Investimentos.Domain.Services;
-using Easynvest.Desafio.Investimentos.Domain.Utilities;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 using Easynvest.Desafio.Investimentos.Infra.IoC;
 using Microsoft.Extensions.Caching.Memory;
+using System.Text.Json;
 
 namespace Easynvest.Desafio.Investimentos.Api
 {
@@ -61,6 +49,7 @@ namespace Easynvest.Desafio.Investimentos.Api
         private static void ConfigureEndpoints(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddMvc() .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
             services.AddHealthChecks();
             services.AddSwaggerDocument(config =>
             {

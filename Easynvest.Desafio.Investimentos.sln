@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easynvest.Desafio.Investime
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easynvest.Desafio.Investimentos.Domain", "Easynvest.Desafio.Investimentos.Domain\Easynvest.Desafio.Investimentos.Domain.csproj", "{A074013C-4D79-4A0D-A38E-B60A435E3912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easynvest.Desafio.Investimentos.Infra.Data", "Easynvest.Desafio.Investimentos.Infra.Data\Easynvest.Desafio.Investimentos.Infra.Data.csproj", "{C9F9158E-1C29-48A0-A739-23D810FD8C07}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easynvest.Desafio.Investimentos.Infra.Data", "Easynvest.Desafio.Investimentos.Infra.Data\Easynvest.Desafio.Investimentos.Infra.Data.csproj", "{C9F9158E-1C29-48A0-A739-23D810FD8C07}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easynvest.Desafio.Investimentos.Infra.IoC", "Easynvest.Desafio.Investimentos.Infra.IoC\Easynvest.Desafio.Investimentos.Infra.IoC.csproj", "{1D8E8630-1E94-44A7-9190-35E92DBFB40D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Easynvest.Desafio.Investimentos.Infra.IoC", "Easynvest.Desafio.Investimentos.Infra.IoC\Easynvest.Desafio.Investimentos.Infra.IoC.csproj", "{1D8E8630-1E94-44A7-9190-35E92DBFB40D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Easynvest.Desafio.Investimentos.Tests", "Easynvest.Desafio.Investimentos.Tests\Easynvest.Desafio.Investimentos.Tests.csproj", "{7D96A0B8-68D0-41EA-A114-7162819B29A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1D8E8630-1E94-44A7-9190-35E92DBFB40D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D8E8630-1E94-44A7-9190-35E92DBFB40D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D8E8630-1E94-44A7-9190-35E92DBFB40D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D96A0B8-68D0-41EA-A114-7162819B29A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D96A0B8-68D0-41EA-A114-7162819B29A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D96A0B8-68D0-41EA-A114-7162819B29A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D96A0B8-68D0-41EA-A114-7162819B29A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

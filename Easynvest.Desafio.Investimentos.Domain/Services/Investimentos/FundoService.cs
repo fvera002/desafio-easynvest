@@ -20,7 +20,8 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
 
         public async Task<IEnumerable<Investimento>> GetInvestimentosByIdCliente(string idCliente)
         {
-            var portifolioFundos = await _apiUrl.GetJsonAsync<PortifolioFundos>();
+            var portifolioFundos = await _apiUrl
+                .GetJsonAsync<PortifolioFundos>();
 
             return portifolioFundos.Fundos;
         }
