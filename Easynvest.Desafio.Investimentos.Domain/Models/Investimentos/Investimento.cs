@@ -18,6 +18,8 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
         public abstract DateTime DataOperacao { get; set; }
         public abstract TipoInvestimento Tipo { get; }
         public virtual double Rentabilidade => ValorTotal - ValorInvestido;
+        public virtual double Iof { get; set; } = 0;
+        public virtual double Ir { get; set; } = 0;
         public virtual DateTime DataReferenciaResgate 
         { 
             get => _dataReferenciaResgate ?? DateTime.Now;

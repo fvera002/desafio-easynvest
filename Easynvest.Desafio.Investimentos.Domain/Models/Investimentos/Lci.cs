@@ -9,7 +9,7 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
 	public class Lci : Investimento
 	{
 		public double Quantidade { get; set; }
-		public double Iof { get; set; }
+		public override double Iof { get; set; }
 		public double OutrasTaxas { get; set; }
 		public double Taxas { get; set; }
 		public string Indice { get; set; }

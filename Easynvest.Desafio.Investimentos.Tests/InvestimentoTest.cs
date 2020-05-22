@@ -8,9 +8,6 @@ namespace Easynvest.Desafio.Investimentos.Tests
 {
     public class InvestimentoTest : Investimento
     {
-        public double Iof { get; set; }
-        public double TotalTaxas { get; set; }
-        public double Quantity { get; set; }
         public override string Nome { get; set; }
 
         public override double ValorInvestido { get; set; }

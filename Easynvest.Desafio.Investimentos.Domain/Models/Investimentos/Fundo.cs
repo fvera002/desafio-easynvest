@@ -8,7 +8,7 @@ namespace Easynvest.Desafio.Investimentos.Domain.Models
 {
     public class Fundo : Investimento
     {
-		public double Iof { get; set; }
+		public override double Iof { get; set; }
 		public double TotalTaxas { get; set; }
 		public double Quantity { get; set; }
 		public override string Nome { get; set; }

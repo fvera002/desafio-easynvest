@@ -25,16 +25,16 @@ namespace Easynvest.Desafio.Investimentos.Domain.Factories
 
             foreach (var item in investimentos)
             {
-                var ir = await _calculadoraIrUtility.CalcularIr(item);
+                item.Ir = await _calculadoraIrUtility.CalcularIr(item);
                 var resgate = await _calculadoraResgate.CalcularValorResgate(item);
                 var investimentoResponse = new InvestimentoResponse()
                 {
                     Nome = item.Nome,
                     ValorInvestido = Math.Round(item.ValorInvestido, 4),
-                    ValorTotal = Math.Round(item.ValorTotal, 2),
+                    ValorTotal = Math.Round(item.ValorTotal, 4),
                     Vencimento = item.Vencimento,
-                    Ir = Math.Round(ir, 4),
-                    ValorResgate = Math.Round(resgate, 4) 
+                    Ir = Math.Round(item.Ir, 4),
+                    ValorResgate = Math.Round(resgate, 2)
                 };
                 portifolioInvestimentos.Investimentos.Add(investimentoResponse);
             }
