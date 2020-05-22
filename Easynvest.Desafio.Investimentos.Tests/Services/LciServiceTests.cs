@@ -53,9 +53,10 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
 		            }
 	            ]
             }";
+        private const string ServiceUrl = "http://fundosurl.mock";
 
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Setup()
         {
             _configuration = new Mock<IConfiguration>();
@@ -63,14 +64,14 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
             _lciService = new LciService(_configuration.Object);
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void TearDown()
         {
             _configuration.VerifyAll();
         }
 
         [Test]
-        public async Task ShouldReturnTwoInvestimentos()
+        public async Task DeveRetornarDoisInvestimentos()
         {
             
             IEnumerable<Investimento> result = null;
@@ -101,7 +102,7 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
         }
 
         [Test]
-        public async Task ShouldReturnTwoLcis()
+        public async Task DeveRetornarDoisLcis()
         {
 
             IEnumerable<Investimento> result = null;

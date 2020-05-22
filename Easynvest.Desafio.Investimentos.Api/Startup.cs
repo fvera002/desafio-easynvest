@@ -7,6 +7,8 @@ using Microsoft.Extensions.Logging;
 using Easynvest.Desafio.Investimentos.Infra.IoC;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
+using Flurl.Http;
+using Easynvest.Desafio.Investimentos.Domain.Interfaces;
 
 namespace Easynvest.Desafio.Investimentos.Api
 {

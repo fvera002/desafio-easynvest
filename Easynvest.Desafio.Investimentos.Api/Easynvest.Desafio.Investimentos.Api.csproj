@@ -18,5 +18,9 @@
     <ProjectReference Include="..\Easynvest.Desafio.Investimentos.Infra.IoC\Easynvest.Desafio.Investimentos.Infra.IoC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Helper\" />
+  </ItemGroup>
+
 
 </Project>

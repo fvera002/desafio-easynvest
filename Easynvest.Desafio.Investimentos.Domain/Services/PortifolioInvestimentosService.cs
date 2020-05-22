@@ -1,6 +1,7 @@
 ﻿using Easynvest.Desafio.Investimentos.Domain.Interfaces;
 using Easynvest.Desafio.Investimentos.Domain.Models;
-using System;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,11 +12,15 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
     {
         private readonly IEnumerable<IInvestimentoService> _investimentoServices;
         private readonly IPortifolioInvestimentosFactory _portifolioInvestimentosFactory;
+        private readonly ILogger<PortifolioInvestimentosService> _logger;
 
-        public PortifolioInvestimentosService(IEnumerable<IInvestimentoService> investimentoServices, IPortifolioInvestimentosFactory portifolioInvestimentosFactory)
+        public PortifolioInvestimentosService(IEnumerable<IInvestimentoService> investimentoServices, 
+            IPortifolioInvestimentosFactory portifolioInvestimentosFactory,
+            ILogger<PortifolioInvestimentosService> logger)
         {
             _investimentoServices = investimentoServices;
             _portifolioInvestimentosFactory = portifolioInvestimentosFactory;
+            _logger = logger;
         }
 
         public async Task<PortifolioInvestimentos> GetPortifolioInvestimentosByIdCliente(string idCliente)
@@ -24,11 +29,21 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
 
             foreach (var item in _investimentoServices)
             {
-                var investimentos = await item.GetInvestimentosByIdCliente(idCliente);
-                investimentosAgregados.AddRange(investimentos);
+                await GetInvestimentosService(idCliente, investimentosAgregados, item);
             }
 
             return await _portifolioInvestimentosFactory.Build(investimentosAgregados);
+        }
+
+        private async Task GetInvestimentosService(string idCliente, List<Investimento> investimentosAgregados, IInvestimentoService service)
+        {
+            var tipoService = service.GetType().ToString();
+
+            _logger.LogInformation($"Chamando serviço {tipoService}");
+            var investimentos = await service.GetInvestimentosByIdCliente(idCliente);
+            _logger.LogInformation($"O serviço {tipoService} retornou {investimentos.Count()} investimentos.");
+
+            investimentosAgregados.AddRange(investimentos);
         }
     }
 }

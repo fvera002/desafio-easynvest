@@ -12,7 +12,7 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
     public class TesouroDiretoService : IInvestimentoService
     {
         private readonly string _apiUrl;
-
+        
         public TesouroDiretoService(IConfiguration configuration)
         {
             _apiUrl = configuration["TesouroDiretoUrl"];

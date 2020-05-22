@@ -41,23 +41,24 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
                     }
 	            ]
             }";
+        private const string ServiceUrl = "http://fundosurl.mock";
 
-        [OneTimeSetUp]
+        [SetUp]
         public void Setup()
         {
             _configuration = new Mock<IConfiguration>();
-            _configuration.Setup(x => x["TesouroDiretoUrl"]).Returns("http://fundosurl.mock");
+            _configuration.Setup(x => x["TesouroDiretoUrl"]).Returns(ServiceUrl);
             _tesouroDiretoService = new TesouroDiretoService(_configuration.Object);
         }
 
-        [OneTimeTearDown]
+        [TearDown]
         public void TearDown()
         {
             _configuration.VerifyAll();
         }
 
         [Test]
-        public async Task ShouldReturnTwoInvestimentos()
+        public async Task DeveRetornarDoisInvestimentos()
         {
             IEnumerable<Investimento> result = null;
             using (var httpTest = new HttpTest())
@@ -78,9 +79,8 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
         }
 
         [Test]
-        public async Task ShouldConvertTesouroDiretoCorrectly()
+        public async Task DeveConverterTesouroDiretoCorretamente()
         {
-
             IEnumerable<Investimento> result = null;
             using (var httpTest = new HttpTest())
             {

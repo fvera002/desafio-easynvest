@@ -18,6 +18,11 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
 
         public async Task<double> CalcularIr(Investimento investimento)
         {
+            if(investimento.Rentabilidade < 0)
+            {
+                return 0; //não faz sentido um imposto negativo?
+            }
+
             var taxa = await _taxaIrRepository.GetTaxaIrByTipoInvestimento(investimento.Tipo);
 
             return investimento.Rentabilidade * taxa;

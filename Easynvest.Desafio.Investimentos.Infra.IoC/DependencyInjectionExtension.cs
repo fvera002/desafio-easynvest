@@ -4,6 +4,7 @@ using Easynvest.Desafio.Investimentos.Domain.Services;
 using Easynvest.Desafio.Investimentos.Domain.Utilities;
 using Easynvest.Desafio.Investimentos.Infra.Data.Repositories;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace Easynvest.Desafio.Investimentos.Infra.IoC
@@ -19,7 +20,7 @@ namespace Easynvest.Desafio.Investimentos.Infra.IoC
             services.AddScoped<ICalculadoraResgateUtility, CalculadoraResgateUtility>();
             services.AddScoped<ICalculadoraResgateUtility, CalculadoraResgateUtility>();
             services.AddScoped<IPortifolioInvestimentosFactory, PortifolioInvestimentosFactory>();
-            services.AddTransient(x => new PortifolioInvestimentosService(x.GetServices<IInvestimentoService>(), x.GetService<IPortifolioInvestimentosFactory>()));
+            services.AddTransient(x => new PortifolioInvestimentosService(x.GetServices<IInvestimentoService>(), x.GetService<IPortifolioInvestimentosFactory>(), x.GetService<ILogger<PortifolioInvestimentosService>>()));
             services.AddScoped<IPortifolioInvestimentosService, PortifolioInvestimentosService>();
             services.AddScoped<ITaxaRepository, TaxaRepository>();
 
