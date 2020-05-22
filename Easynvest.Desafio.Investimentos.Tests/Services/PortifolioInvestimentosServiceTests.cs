@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
+using System;
 
 namespace Easynvest.Desafio.Investimentos.Tests.Services
 {
@@ -137,6 +138,18 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
             var result = await _portifolioInvestimentosService.GetPortifolioInvestimentosByIdCliente(idCliente);
 
             result.Should().NotBeNull();
+        }
+
+        [Test]
+        public void DeveLancarExcecaoNoServicoLci()
+        {
+            var idCliente = "CLIENTE_ID_12398764";
+
+            _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente));
+            _tesouroDiretoService.Setup(x => x.GetInvestimentosByIdCliente(idCliente));
+            _lciService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ThrowsAsync(new Exception("Internal Server Error"));
+
+            _portifolioInvestimentosService.Invoking(x => x.GetPortifolioInvestimentosByIdCliente(idCliente)).Should().Throw<Exception>();
         }
     }
 }

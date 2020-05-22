@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System;
 
 namespace Easynvest.Desafio.Investimentos.Domain.Services
 {
@@ -39,11 +40,19 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
         {
             var tipoService = service.GetType().ToString();
 
-            _logger.LogInformation($"Chamando serviço {tipoService}");
-            var investimentos = await service.GetInvestimentosByIdCliente(idCliente);
-            _logger.LogInformation($"O serviço {tipoService} retornou {investimentos.Count()} investimentos.");
-
-            investimentosAgregados.AddRange(investimentos);
+            try
+            {
+                _logger.LogInformation($"Iniciando chamada ao serviço {tipoService} para o cliente {idCliente}");
+                var investimentos = await service.GetInvestimentosByIdCliente(idCliente);
+                _logger.LogInformation($"Chamada ao serviço {tipoService} finalizada com sucesso para o cliente {idCliente}");
+                
+                investimentosAgregados.AddRange(investimentos);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Erro ao realizar chamada ao serviço {tipoService}", ex);
+                throw;
+            }
         }
     }
 }

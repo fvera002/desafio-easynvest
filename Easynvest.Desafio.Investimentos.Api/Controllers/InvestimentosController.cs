@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,9 +19,11 @@ namespace Easynvest.Desafio.Investimentos.Api.Controllers
         private readonly IMemoryCache _cache;
         private readonly IPortifolioInvestimentosService _portifolioInvestimentosService;
         private readonly long _hoursInCache;
+        ILogger<InvestimentosController> _logger;
 
-        public InvestimentosController(IConfiguration configuration, IMemoryCache cache, IPortifolioInvestimentosService portifolioInvestimentosService)
+        public InvestimentosController(ILogger<InvestimentosController> logger, IConfiguration configuration, IMemoryCache cache, IPortifolioInvestimentosService portifolioInvestimentosService)
         {
+            _logger = logger;
             _cache = cache;
             _portifolioInvestimentosService = portifolioInvestimentosService;
 
@@ -45,13 +48,21 @@ namespace Easynvest.Desafio.Investimentos.Api.Controllers
         public async Task<IActionResult> GetPortifolioInvestimentosByClient([FromRoute] string idCliente)
         {
             PortifolioInvestimentos result;
-            var cacheKey = CacheKey + idCliente;
-
-            if (!_cache.TryGetValue(cacheKey, out result))
+            try
             {
-                // Key not in cache, so get data.
-                result = await _portifolioInvestimentosService.GetPortifolioInvestimentosByIdCliente(idCliente);
-                _cache.Set(cacheKey, result, CacheOptions);
+                var cacheKey = CacheKey + idCliente;
+
+                if (!_cache.TryGetValue(cacheKey, out result))
+                {
+                    // Key not in cache, so get data.
+                    result = await _portifolioInvestimentosService.GetPortifolioInvestimentosByIdCliente(idCliente);
+                    _cache.Set(cacheKey, result, CacheOptions);
+                }
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError($"Erro ao chamar na chamada api/v1/clientes/{idCliente}/investimentos", ex);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             return new ObjectResult(result) { StatusCode = StatusCodes.Status200OK };
