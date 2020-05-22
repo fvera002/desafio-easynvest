@@ -27,25 +27,25 @@ namespace Easynvest.Desafio.Investimentos.Domain.Utilities
                 return investimento.ValorTotal;
             }
 
-            double taxaCustodia = 0;
             var tipoTaxaCustodia = TipoTaxaCustodia.Default; //Outros: Perde 30% do valor investido
             var periodoVencimento = investimento.Vencimento - investimento.DataOperacao;
             var periodoResgate = investimento.DataReferenciaResgate - investimento.DataOperacao;
             var metadeVencimento = new TimeSpan(periodoVencimento.Ticks / 2);
-
-            //Investimento com até 3 meses para vencer: Perde 6% do valor investido
-            if (investimento.DataReferenciaResgate > investimento.Vencimento.AddMonths(-3))
-            {
-                tipoTaxaCustodia = TipoTaxaCustodia.TresMesesVencimento;
-            }
+            
             //Investimento com mais da metade do tempo em custódia: Perde 15% do valor investido
-            else if (periodoResgate > metadeVencimento)
+            if (periodoResgate > metadeVencimento)
             {
                 tipoTaxaCustodia = TipoTaxaCustodia.MetadeVencimento;
             }
+            //Investimento com até 3 meses para vencer: Perde 6% do valor investido
+            else if (investimento.DataReferenciaResgate > investimento.Vencimento.AddMonths(-3))
+            {
+                tipoTaxaCustodia = TipoTaxaCustodia.TresMesesVencimento;
+            }
+            
 
-            taxaCustodia = await _taxaIrRepository.GetTaxaCustodiaByTipoCustodia(tipoTaxaCustodia);
-            return investimento.ValorInvestido * (1 - taxaCustodia);
+            var taxaCustodia = await _taxaIrRepository.GetTaxaCustodiaByTipoCustodia(tipoTaxaCustodia);
+            return (investimento.ValorInvestido * (1 - taxaCustodia));
         }
     }
 }

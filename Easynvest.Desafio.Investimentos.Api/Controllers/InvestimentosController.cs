@@ -44,8 +44,9 @@ namespace Easynvest.Desafio.Investimentos.Api.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/clientes/{idCliente}/[controller]")]
-        public async Task<IActionResult> GetPortifolioInvestimentosByClient([FromRoute] string idCliente)
+        //[Route("api/v1/clientes/{idCliente}/[controller]")]
+        [Route("api/v1/[controller]")]
+        public async Task<IActionResult> GetPortifolioInvestimentosByClient([FromQuery] string idCliente)
         {
             PortifolioInvestimentos result;
             try

@@ -63,6 +63,7 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
             var tesourosDireto = _fixture.CreateMany<TesouroDireto>(qtTesouroDireto);
             var investimentos = _fixture.CreateMany<InvestimentoResponse>(qtTotal);
             var portifolio = _fixture.Create<PortifolioInvestimentos>();
+            portifolio.Investimentos = investimentos.ToList();
 
             _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(fundos);
             _lciService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(lcis);
@@ -78,7 +79,7 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
         [TestCase(1, 1)]
         [TestCase(10, 1)]
         [Test]
-        public async Task DeveRetornarVariosInvestimentosENenhumFundos(int qtLcis, int qtTesouroDireto)
+        public async Task DeveRetornarVariosInvestimentosEExcecaoEmFundos(int qtLcis, int qtTesouroDireto)
         {
             int qtTotal = qtLcis + qtTesouroDireto;
             var idCliente = "CLIENTE_ID_12398764";
@@ -86,21 +87,42 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
             var tesourosDireto = _fixture.CreateMany<TesouroDireto>(qtTesouroDireto);
             var investimentos = _fixture.CreateMany<InvestimentoResponse>(qtTotal);
             var portifolio = _fixture.Create<PortifolioInvestimentos>();
+            portifolio.Investimentos = investimentos.ToList();
 
             _lciService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(lcis);
+            _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ThrowsAsync(new Exception("Internal Server Error"));
             _tesouroDiretoService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(tesourosDireto);
             _portifolioInvestimentosFactory.Setup(x => x.Build(It.IsAny<IEnumerable<Investimento>>())).ReturnsAsync(portifolio);
 
             var result = await _portifolioInvestimentosService.GetPortifolioInvestimentosByIdCliente(idCliente);
 
             result.Should().NotBeNull();
+            result.Investimentos.Should().HaveCount(qtTotal);
+
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Exactly(5));
+
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
         }
 
         [TestCase(3, 5)]
         [TestCase(1, 1)]
         [TestCase(10, 1)]
         [Test]
-        public async Task DeveRetornarVariosInvestimentosENenhumTesouroDireto(int qtLcis, int qtFundos)
+        public async Task DeveRetornarVariosInvestimentosEExcecaoEmTesouroDireto(int qtLcis, int qtFundos)
         {
             int qtTotal = qtFundos + qtLcis;
             var idCliente = "CLIENTE_ID_12398764";
@@ -108,21 +130,43 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
             var lcis = _fixture.CreateMany<Lci>(qtLcis);
             var investimentos = _fixture.CreateMany<InvestimentoResponse>(qtTotal);
             var portifolio = _fixture.Create<PortifolioInvestimentos>();
+            portifolio.Investimentos = investimentos.ToList();
 
             _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(fundos);
             _lciService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(lcis);
+            _tesouroDiretoService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ThrowsAsync(new Exception("Internal Server Error"));
             _portifolioInvestimentosFactory.Setup(x => x.Build(It.IsAny<IEnumerable<Investimento>>())).ReturnsAsync(portifolio);
 
             var result = await _portifolioInvestimentosService.GetPortifolioInvestimentosByIdCliente(idCliente);
 
             result.Should().NotBeNull();
+            result.Investimentos.Should().HaveCount(qtTotal);
+
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Exactly(5));
+
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
         }
 
+       
         [TestCase(3, 5)]
         [TestCase(1, 1)]
         [TestCase(10, 1)]
         [Test]
-        public async Task DeveRetornarVariosInvestimentosENenhumLci(int qtFundos, int qtTesouroDireto)
+        public async Task DeveRetornarVariosInvestimentosEExcecaoEmLci(int qtFundos, int qtTesouroDireto)
         {
             int qtTotal = qtFundos + qtTesouroDireto;
             var idCliente = "CLIENTE_ID_12398764";
@@ -130,26 +174,35 @@ namespace Easynvest.Desafio.Investimentos.Tests.Services
             var tesourosDireto = _fixture.CreateMany<TesouroDireto>(qtTesouroDireto);
             var investimentos = _fixture.CreateMany<InvestimentoResponse>(qtTotal);
             var portifolio = _fixture.Create<PortifolioInvestimentos>();
+            portifolio.Investimentos = investimentos.ToList();
 
-            _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(fundos);
+            _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(fundos); 
+            _lciService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ThrowsAsync(new Exception("Internal Server Error"));
             _tesouroDiretoService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ReturnsAsync(tesourosDireto);
             _portifolioInvestimentosFactory.Setup(x => x.Build(It.IsAny<IEnumerable<Investimento>>())).ReturnsAsync(portifolio);
 
             var result = await _portifolioInvestimentosService.GetPortifolioInvestimentosByIdCliente(idCliente);
 
             result.Should().NotBeNull();
-        }
+            result.Investimentos.Should().HaveCount(qtTotal);
 
-        [Test]
-        public void DeveLancarExcecaoNoServicoLci()
-        {
-            var idCliente = "CLIENTE_ID_12398764";
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Information,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Exactly(5));
 
-            _fundoServices.Setup(x => x.GetInvestimentosByIdCliente(idCliente));
-            _tesouroDiretoService.Setup(x => x.GetInvestimentosByIdCliente(idCliente));
-            _lciService.Setup(x => x.GetInvestimentosByIdCliente(idCliente)).ThrowsAsync(new Exception("Internal Server Error"));
-
-            _portifolioInvestimentosService.Invoking(x => x.GetPortifolioInvestimentosByIdCliente(idCliente)).Should().Throw<Exception>();
+            _logger.Verify(
+                x => x.Log(
+                    LogLevel.Error,
+                    It.IsAny<EventId>(),
+                    It.IsAny<It.IsAnyType>(),
+                    It.IsAny<Exception>(),
+                    (Func<It.IsAnyType, Exception, string>)It.IsAny<object>()),
+                Times.Once);
         }
     }
 }

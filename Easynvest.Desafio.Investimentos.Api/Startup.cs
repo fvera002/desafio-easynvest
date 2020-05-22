@@ -51,7 +51,6 @@ namespace Easynvest.Desafio.Investimentos.Api
         private static void ConfigureEndpoints(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddMvc() .AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
             services.AddHealthChecks();
             services.AddSwaggerDocument(config =>
             {

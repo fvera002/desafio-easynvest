@@ -50,8 +50,7 @@ namespace Easynvest.Desafio.Investimentos.Domain.Services
             }
             catch(Exception ex)
             {
-                _logger.LogError($"Erro ao realizar chamada ao serviço {tipoService}", ex);
-                throw;
+                _logger.LogError(ex, $"Erro ao realizar chamada ao serviço {tipoService}");
             }
         }
     }

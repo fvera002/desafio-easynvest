@@ -32,13 +32,30 @@ namespace Easynvest.Desafio.Investimentos.Tests.Utilities
             _taxaIrRepository.VerifyAll();
         }
 
+        [TestCase(100, 85, 0.15f)]
+        [Test]
+        public async Task DeveCalcularResgateParaInvestimentoComAteTresMesesVencimentoETambemMaisMetadeVencimentoComTaxaDeMetade(double valorInvestido, double valorResgate, double taxa)
+        {
+            var investimento = _fixture.Create<InvestimentoTest>();
+            investimento.DataReferenciaResgate = DateTime.Now;
+            investimento.DataOperacao = investimento.DataReferenciaResgate.AddMonths(-4);
+            investimento.Vencimento = investimento.DataReferenciaResgate.AddMonths(2);
+            investimento.ValorInvestido = valorInvestido;
+
+            _taxaIrRepository.Setup(x => x.GetTaxaCustodiaByTipoCustodia(TipoTaxaCustodia.MetadeVencimento)).ReturnsAsync(taxa);
+
+            var result = await _calculadoraResgateUtility.CalcularValorResgate(investimento);
+
+            result.Should().BeApproximately(valorResgate, 2);
+        }
+
         [TestCase(100, 94, 0.06f)]
         [Test]
         public async Task DeveCalcularResgateParaInvestimentoComAteTresMesesVencimento(double valorInvestido, double valorResgate, double taxa)
         {
             var investimento = _fixture.Create<InvestimentoTest>();
             investimento.DataReferenciaResgate = DateTime.Now;
-            investimento.DataOperacao = investimento.DataReferenciaResgate.AddMonths(-10);
+            investimento.DataOperacao = investimento.DataReferenciaResgate.AddMonths(-1);
             investimento.Vencimento = investimento.DataReferenciaResgate.AddMonths(2);
             investimento.ValorInvestido = valorInvestido;
 
