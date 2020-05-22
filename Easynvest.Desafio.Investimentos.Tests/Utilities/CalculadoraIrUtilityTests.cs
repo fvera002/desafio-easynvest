@@ -1,17 +1,12 @@
 ﻿using AutoFixture;
-using Easynvest.Desafio.Investimentos.Domain.Dtos;
 using Easynvest.Desafio.Investimentos.Domain.Interfaces;
 using Easynvest.Desafio.Investimentos.Domain.Models;
 using Easynvest.Desafio.Investimentos.Domain.Services;
-using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Easynvest.Desafio.Investimentos.Domain.Models.Investimentos;
+using Easynvest.Desafio.Investimentos.Domain.Utilities;
 
 namespace Easynvest.Desafio.Investimentos.Tests.Utilities
 {
@@ -112,7 +107,7 @@ namespace Easynvest.Desafio.Investimentos.Tests.Utilities
         [TestCase(1000, 0)]
         [TestCase(1200, 1100)]
         [Test]
-        public async Task ShouldReturnCorrectLciTaxaIrParaRentabilidadeNegativa(double valorInvestido, double valorTotal)
+        public async Task DeveRetornarIrCorretamenteCalculadoParaLciComRentabilidadeNegativa(double valorInvestido, double valorTotal)
         {
             var investimento = _fixture.Create<Lci>();
             investimento.ValorInvestido = valorInvestido;

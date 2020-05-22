@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Easynvest.Desafio.Investimentos.Domain.Services
+namespace Easynvest.Desafio.Investimentos.Domain.Utilities
 {
     public class CalculadoraIrUtility : ICalculadoraIrUtility
     {

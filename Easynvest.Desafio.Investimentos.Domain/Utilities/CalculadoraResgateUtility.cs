@@ -21,6 +21,12 @@ namespace Easynvest.Desafio.Investimentos.Domain.Utilities
 
         public async Task<double> CalcularValorResgate(Investimento investimento)
         {
+            //Se não está resgatando antecipado, o valor é total
+            if (investimento.DataReferenciaResgate > investimento.Vencimento)
+            {
+                return investimento.ValorTotal;
+            }
+
             double taxaCustodia = 0;
             var tipoTaxaCustodia = TipoTaxaCustodia.Default; //Outros: Perde 30% do valor investido
             var periodoVencimento = investimento.Vencimento - investimento.DataOperacao;
@@ -32,21 +38,14 @@ namespace Easynvest.Desafio.Investimentos.Domain.Utilities
             {
                 tipoTaxaCustodia = TipoTaxaCustodia.TresMesesVencimento;
             }
-
             //Investimento com mais da metade do tempo em custódia: Perde 15% do valor investido
-            if (periodoResgate > metadeVencimento)
+            else if (periodoResgate > metadeVencimento)
             {
                 tipoTaxaCustodia = TipoTaxaCustodia.MetadeVencimento;
             }
 
-            //Se não está resgatando antecipado, o valor é total
-            if(investimento.DataReferenciaResgate < investimento.Vencimento)
-            {
-                taxaCustodia = await _taxaIrRepository.GetTaxaCustodiaByTipoCustodia(tipoTaxaCustodia);
-                return investimento.ValorInvestido * (1 - taxaCustodia);
-            }
-
-            return investimento.ValorTotal;
+            taxaCustodia = await _taxaIrRepository.GetTaxaCustodiaByTipoCustodia(tipoTaxaCustodia);
+            return investimento.ValorInvestido * (1 - taxaCustodia);
         }
     }
 }

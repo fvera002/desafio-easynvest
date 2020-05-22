@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Factories\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Easynvest.Desafio.Investimentos.Domain\Easynvest.Desafio.Investimentos.Domain.csproj" />
   </ItemGroup>
 
